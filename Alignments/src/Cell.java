@@ -5,7 +5,7 @@
 /*
 represent cell in matrix, contains value and previous cell
  */
-public class Cell {
+public class Cell implements Comparable<Cell> {
     private double value;
     private Cell previous;
     private final int xCoordinate;
@@ -61,5 +61,10 @@ public class Cell {
             }
         }
         return  -1;
+    }
+
+    @Override
+    public int compareTo(Cell other) {
+        return Double.compare(value, other.getValue());
     }
 }
