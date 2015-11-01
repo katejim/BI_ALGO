@@ -10,9 +10,10 @@ public class Cell implements Comparable<Cell> {
     private Cell previous;
     private final int xCoordinate;
     private final int yCoordinate;
-    public final static int DIAG_STEP = 0;
-    public final static int LEFT_STEP = 1;
-    public final static int BOTTOM_STEP = 2;
+    public final static int DIAGONAL = 0;
+    public final static int HORIZONTAL = 1;
+    public final static int VERTICAL = 2;
+    private int matrixType;
 
 
     public int getxCoordinate() {
@@ -34,6 +35,10 @@ public class Cell implements Comparable<Cell> {
     public void setValue(double value) {
         this.value = value;
     }
+    public Cell updateValue(double value) {
+        this.value += value;
+        return this;
+    }
 
     public void setPrevious(Cell previous) {
         this.previous = previous;
@@ -46,21 +51,34 @@ public class Cell implements Comparable<Cell> {
         this.yCoordinate = yCoordinate;
     }
 
+    public Cell(double value, Cell previous, int xCoordinate, int yCoordinate, int matrixType) {
+        this(value, previous, xCoordinate, yCoordinate);
+        this.matrixType = matrixType;
+    }
+
     public int getType() {
         Cell previous = this.previous;
         if (previous != null) {
             if (((xCoordinate - 1) == previous.xCoordinate)
                     && ((yCoordinate - 1) == previous.yCoordinate)) {
-                return DIAG_STEP;
+                return DIAGONAL;
             } else if ((xCoordinate == previous.xCoordinate)
                     && ((yCoordinate - 1) == previous.yCoordinate)) {
-                return LEFT_STEP;
+                return HORIZONTAL;
             } else if (((xCoordinate - 1) == previous.xCoordinate)
                     && (yCoordinate  == previous.yCoordinate)) {
-                return BOTTOM_STEP;
+                return VERTICAL;
             }
         }
         return  -1;
+    }
+
+    public int getMatrixType() {
+        return matrixType;
+    }
+
+    public void setMatrixType(int matrixType) {
+        this.matrixType = matrixType;
     }
 
     @Override

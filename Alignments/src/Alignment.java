@@ -23,11 +23,10 @@ abstract public class Alignment {
 
     abstract Pair<String, String> getPath(String string1, String string2);
 
-    abstract void initalize(Matrix inMatrix, double gap);
+    abstract Matrix initalize(int rows, int columns);
 
     public Matrix generateMatrix(int rows, int columns, String str1, String str2) {
-        Matrix mmatrix = new Matrix(rows + 1, columns + 1);
-        initalize(mmatrix, gap);
+        Matrix mmatrix = initalize(rows + 1, columns + 1);
         for (int i = 1; i < rows + 1; i++) {
             for (int j = 1; j < columns + 1; j++) {
                 Pair<Double, Cell> first = new Pair<Double, Cell>(mmatrix.getMatrix()[i - 1][j - 1].getValue() +

@@ -28,13 +28,13 @@ public class GlobalAlignment extends Alignment {
         Cell currentCell = matrix.getMatrix()[rows - 1][columns - 1];
 
         while (currentCell.getPreviousCell() != null) {
-            if (currentCell.getType() == Cell.DIAG_STEP) {
+            if (currentCell.getType() == Cell.DIAGONAL) {
                 resultString1.add(string1.charAt(currentCell.getxCoordinate() - 1));
                 resultString2.add(string2.charAt(currentCell.getyCoordinate() - 1));
-            } else if (currentCell.getType() == Cell.LEFT_STEP) {
+            } else if (currentCell.getType() == Cell.HORIZONTAL) {
                 resultString1.add('-');
                 resultString2.add(string2.charAt(currentCell.getyCoordinate() - 1));
-            } else if (currentCell.getType() == Cell.BOTTOM_STEP) {
+            } else if (currentCell.getType() == Cell.VERTICAL) {
                 resultString1.add(string1.charAt(currentCell.getxCoordinate() - 1));
                 resultString2.add('-');
             }
@@ -47,16 +47,15 @@ public class GlobalAlignment extends Alignment {
     }
 
     @Override
-    public void initalize(Matrix inMatrix, double gap) {
-        int rows = inMatrix.getRows();
-        int columns = inMatrix.getColumns();
+    public Matrix initalize(int rows, int columns) {
+        Matrix matrix = new Matrix(rows, columns);
 
         int initalizer = 0;
 
 
         Cell prev = new Cell(0, null, 0, 0);
         for (int i = 0; i < rows; i++) {
-            inMatrix.getMatrix()[i][0] = new Cell(initalizer, prev, i, 0);
+            matrix.getMatrix()[i][0] = new Cell(initalizer, prev, i, 0);
             prev = new Cell(initalizer, prev, i, 0);
             initalizer -= gap;
         }
@@ -64,9 +63,11 @@ public class GlobalAlignment extends Alignment {
         initalizer = 0;
         prev = new Cell(0, null, 0, 0);
         for (int i = 1; i < columns; i++) {
-            inMatrix.getMatrix()[0][i] = new Cell(initalizer, prev, 0, i);
+            matrix.getMatrix()[0][i] = new Cell(initalizer, prev, 0, i);
             prev = new Cell(initalizer, prev, 0, i);
             initalizer -= gap;
         }
+
+        return matrix;
     }
 }
