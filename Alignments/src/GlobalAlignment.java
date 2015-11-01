@@ -10,6 +10,9 @@ import java.util.List;
  */
 public class GlobalAlignment extends Alignment {
 
+    public GlobalAlignment(int gap){
+        super(gap);
+    }
     public GlobalAlignment(int eqWeight, int notEqWeight, int gap) {
         super(eqWeight, notEqWeight, gap);
     }
@@ -65,6 +68,5 @@ public class GlobalAlignment extends Alignment {
             prev = new Cell(initalizer, prev, 0, i);
             initalizer -= gap;
         }
-
     }
 }

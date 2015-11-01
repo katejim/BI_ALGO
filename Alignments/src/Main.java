@@ -14,6 +14,11 @@ public class Main {
         Pair<String, String> result = globalAlignment.getPath(first, second);
         System.out.println(result.getKey() + "\n" + result.getValue());
 
+        System.out.println("\nWEIGHTED GLOBAL");
+        GlobalAlignment wglobalAlignment = new WeightedGlobal(1);
+        Pair<String, String> resultWeighted = wglobalAlignment.getPath(first, second);
+        System.out.println(resultWeighted.getKey() + "\n" + result.getValue());
+
         System.out.println("\nLOCAL");
         LocalAlignment localAlignment = new LocalAlignment(1, 1, 1);
         Pair<String, String> resultLocal = localAlignment.getPath(first, second);

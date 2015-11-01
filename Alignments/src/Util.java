@@ -29,9 +29,5 @@ public class Util {
         return result;
     }
 
-    public static int isEquals(char i, char j, int match, int mismatch) {
-        return i == j ? match : -mismatch;
-    }
-
 
 }
