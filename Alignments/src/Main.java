@@ -6,12 +6,8 @@ import javafx.util.Pair;
  */
 public class Main {
     public static void main(String[] args) {
-//        String first = "ATTAGCTCGTCTCATTGTATGTTCATCACTCCTCCCGACAAAAAGCATGACTGCT";
-//        String second = "TCAGGTAATAAAAAAGCCGGAGCTCCCTTTCCGGCACGTCTCATTGCCGTATCACTTCCTCCCGAAAAAGCATTAATCAGTAAAACCCGACTGCTCAGCGAGAATCGTCGAAAAGGACG";
-
-        String first = "TG";
-        String second = "TG";
-
+        String first = "ATTAGCTCGTCTCATTGTATGTTCATCACTCCTCCCGACAAAAAGCATGACTGCT";
+        String second = "TCTTCACCCGACTGCTCAGCGAGAATCGTCGAAAAGGACG";
 
         System.out.println("GLOBAL");
         GlobalAlignment globalAlignment = new GlobalAlignment(1, 1, 1);
@@ -30,7 +26,7 @@ public class Main {
 
 
         System.out.println("\nAFFINE");
-        Affine affineAlignment = new Affine(1, -1, -4, -1);
+        Affine affineAlignment = new Affine(25, 1, 7, 3);
         Pair<String, String> resultAffine = affineAlignment.getPath(first, second);
         System.out.println(resultAffine.getKey() + "\n" + resultAffine.getValue());
     }

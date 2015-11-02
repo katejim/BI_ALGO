@@ -2,6 +2,7 @@ import javafx.util.Pair;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Currency;
 import java.util.List;
 
 /**
@@ -30,13 +31,31 @@ public class Affine extends Alignment {
         initalize(rows, columns);
         for (int i = 1; i < rows; i++) {
             for (int j = 1; j < columns; j++) {
-                Cell iCell = getMax(I.getMatrix()[i][j - 1].updateValue(-gapExtend), M.getMatrix()[i][j - 1].updateValue(-gapOpen));
-                I.getMatrix()[i][j] = new Cell(iCell.getValue(), iCell, i, j, Cell.HORIZONTAL);
-                Cell dCell = getMax(D.getMatrix()[i - 1][j].updateValue(-gapExtend), M.getMatrix()[i - 1][j].updateValue(-gapOpen));
-                D.getMatrix()[i][j] = new Cell(dCell.getValue(), dCell, i, j, Cell.VERTICAL);
-                Cell getIDmax = getMax(I.getMatrix()[i][j], D.getMatrix()[i][j]);
-                Cell mCell = getMax(getIDmax, M.getMatrix()[i - 1][j - 1].updateValue(-isEquals(string1.charAt(i - 1), string2.charAt(j - 1))));
-                M.getMatrix()[i][j] = new Cell(mCell.getValue(), mCell, i, j, Cell.DIAGONAL);
+
+
+                Pair<Double, Cell> iCell = Util.getMax(
+                        new Pair<Double, Cell>(M.getMatrix()[i][j - 1].getValue() - gapOpen - gapExtend, M.getMatrix()[i][j - 1]),
+                        new Pair<Double, Cell>(I.getMatrix()[i][j - 1].getValue() - gapExtend, I.getMatrix()[i][j - 1]),
+                        new Pair<Double, Cell>(D.getMatrix()[i][j - 1].getValue() - gapOpen - gapExtend, D.getMatrix()[i][j - 1]));
+
+
+                I.getMatrix()[i][j] = new Cell(iCell.getKey(), iCell.getValue(), i, j, Cell.HORIZONTAL);
+
+
+                Pair<Double, Cell> dCell = Util.getMax(
+                        new Pair<Double, Cell>(M.getMatrix()[i - 1][j].getValue() - gapOpen - gapExtend, M.getMatrix()[i - 1][j]),
+                        new Pair<Double, Cell>(D.getMatrix()[i - 1][j].getValue() - gapExtend, D.getMatrix()[i - 1][j]),
+                        new Pair<Double, Cell>(I.getMatrix()[i - 1][j].getValue() - gapOpen - gapExtend, I.getMatrix()[i - 1][j]));
+
+                D.getMatrix()[i][j] = new Cell(dCell.getKey(), dCell.getValue(), i, j, Cell.VERTICAL);
+
+                Pair<Double, Cell> mCell = Util.getMax(
+                        new Pair<Double, Cell>(M.getMatrix()[i - 1][j - 1].getValue() + isEquals(string1.charAt(i - 1), string2.charAt(j - 1)), M.getMatrix()[i - 1][j - 1]),
+                        new Pair<Double, Cell>(I.getMatrix()[i][j].getValue(), I.getMatrix()[i][j]),
+                        new Pair<Double, Cell>(D.getMatrix()[i][j].getValue(), D.getMatrix()[i][j]));
+
+                M.getMatrix()[i][j] = new Cell(mCell.getKey(), mCell.getValue(), i, j, Cell.DIAGONAL);
+
             }
         }
 
@@ -44,50 +63,47 @@ public class Affine extends Alignment {
         List<Character> resultString1 = new ArrayList<Character>();
         List<Character> resultString2 = new ArrayList<Character>();
 
-        Cell currentCell = M.getMatrix()[rows - 1][columns - 1];
-        //previously print diag type
-        int matrixType = currentCell.getPreviousCell().getMatrixType();
-        int curX = currentCell.getPreviousCell().getxCoordinate();
-        int curY = currentCell.getPreviousCell().getyCoordinate();
 
-        while (currentCell.getPreviousCell() != null) {
-            if (matrixType == Cell.DIAGONAL) {
-                resultString1.add(string1.charAt(curX - 1));
-                resultString2.add(string2.charAt(curY - 1));
-                curX -= 1;
-                curY -= 1;
-            } else if (matrixType == Cell.HORIZONTAL) {
+        int i = string1.length();
+        int j = string2.length();
+
+        while (i > 0 || j > 0) {
+            if (i > 0 && j > 0 &&
+                    M.getMatrix()[i][j].getValue() == M.getMatrix()[i - 1][j - 1].getValue() + isEquals(string1.charAt(i - 1), string2.charAt(j - 1))) {
+                resultString1.add(string1.charAt(i - 1));
+                resultString2.add(string2.charAt(j - 1));
+                i -= 1;
+                j -= 1;
+            } else if (j > 0 && M.getMatrix()[i][j].getValue() == I.getMatrix()[i][j].getValue()) {
                 resultString1.add('-');
-                resultString2.add(string2.charAt(curY - 1));
-                curY -= 1;
-            } else if (matrixType == Cell.VERTICAL) {
-                resultString1.add(string1.charAt(curX - 1));
+                resultString2.add(string2.charAt(j - 1));
+                j -= 1;
+            } else if (i > 0 && M.getMatrix()[i][j].getValue() == D.getMatrix()[i][j].getValue()) {
+                resultString1.add(string1.charAt(i - 1));
                 resultString2.add('-');
-                curX -= 1;
+                i -= 1;
             }
-
-            if (currentCell.getMatrixType() != matrixType) {
-                currentCell = currentCell.getPreviousCell();
-            }
-
-            currentCell = currentCell.getPreviousCell();
-            matrixType = currentCell.getPreviousCell().getMatrixType();
-            curX = currentCell.getPreviousCell().getxCoordinate();
-            curY = currentCell.getPreviousCell().getyCoordinate();
         }
+
 
         Collections.reverse(resultString1);
         Collections.reverse(resultString2);
 
-        return new Pair<String, String>(resultString1.toString(), resultString2.toString());
+        return new Pair<String, String>(getStringRepresentation(resultString1), getStringRepresentation(resultString2));
     }
 
     private Cell getMax(Cell c1, Cell c2) {
-        if (c1.getValue() > c2.getValue()) {
+        if (c1.getValue() >= c2.getValue()) {
             return c1;
         } else {
             return c2;
         }
+    }
+
+
+    private Cell getMax(Cell c1, Cell c2, Cell c3) {
+        Cell temp = getMax(c1, c2);
+        return getMax(temp, c3);
     }
 
     @Override
@@ -103,39 +119,40 @@ public class Affine extends Alignment {
             prev = new Cell(initalizer, prev, i, 0);
         }
 
-        initalizer = 0;
+        initalizer = Integer.MIN_VALUE;
         prev = new Cell(0, null, 0, 0, Cell.DIAGONAL);
         for (int i = 1; i < columns; i++) {
             M.getMatrix()[0][i] = new Cell(initalizer, prev, 0, i, Cell.DIAGONAL);
             prev = new Cell(initalizer, prev, 0, i);
         }
 
-        prev = new Cell(0, null, 0, 0, Cell.VERTICAL);
-        initalizer = 0;
+        initalizer = Integer.MIN_VALUE;
+        prev = new Cell(initalizer, null, 0, 0, Cell.VERTICAL);
         for (int i = 0; i < rows; i++) {
             D.getMatrix()[i][0] = new Cell(initalizer, prev, i, 0, Cell.VERTICAL);
             prev = new Cell(initalizer, prev, i, 0);
         }
 
 
-        prev = new Cell(initalizer, null, 0, 0, Cell.VERTICAL);
+        prev = new Cell(0, null, 0, 0, Cell.VERTICAL);
         for (int i = 1; i < columns; i++) {
             initalizer = gapOpen + i * gapExtend;
             D.getMatrix()[0][i] = new Cell(initalizer, prev, 0, i, Cell.VERTICAL);
             prev = new Cell(initalizer, prev, 0, i);
         }
 
-        initalizer = 0;
-        prev = new Cell(initalizer, null, 0, 0, Cell.HORIZONTAL);
+
+        prev = new Cell(0, null, 0, 0, Cell.HORIZONTAL);
         for (int i = 0; i < rows; i++) {
+            initalizer = gapOpen + i * gapExtend;
             I.getMatrix()[i][0] = new Cell(initalizer, prev, i, 0, Cell.HORIZONTAL);
             prev = new Cell(initalizer, prev, i, 0);
         }
 
-        prev = new Cell(0, null, 0, 0, Cell.HORIZONTAL);
+        initalizer = Integer.MIN_VALUE;
+        prev = new Cell(initalizer, null, 0, 0, Cell.HORIZONTAL);
         for (int i = 1; i < columns; i++) {
-            initalizer = gapOpen + i * gapExtend;
-            M.getMatrix()[0][i] = new Cell(initalizer, prev, 0, i, Cell.HORIZONTAL);
+            I.getMatrix()[0][i] = new Cell(initalizer, prev, 0, i, Cell.HORIZONTAL);
             prev = new Cell(initalizer, prev, 0, i);
         }
 
