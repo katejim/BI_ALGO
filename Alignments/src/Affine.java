@@ -34,20 +34,18 @@ public class Affine extends Alignment {
 
 
                 Pair<Double, Cell> iCell = Util.getMax(
-                        new Pair<Double, Cell>(M.getMatrix()[i][j - 1].getValue() - gapOpen - gapExtend, M.getMatrix()[i][j - 1]),
-                        new Pair<Double, Cell>(I.getMatrix()[i][j - 1].getValue() - gapExtend, I.getMatrix()[i][j - 1]),
-                        new Pair<Double, Cell>(D.getMatrix()[i][j - 1].getValue() - gapOpen - gapExtend, D.getMatrix()[i][j - 1]));
+                        new Pair<Double, Cell>(M.getMatrix()[i][j - 1].getValue() + gapOpen, M.getMatrix()[i][j - 1]),
+                        new Pair<Double, Cell>(D.getMatrix()[i][j - 1].getValue() + gapExtend, D.getMatrix()[i][j - 1]));
 
 
-                I.getMatrix()[i][j] = new Cell(iCell.getKey(), iCell.getValue(), i, j, Cell.HORIZONTAL);
+                D.getMatrix()[i][j] = new Cell(iCell.getKey(), iCell.getValue(), i, j, Cell.HORIZONTAL);
 
 
                 Pair<Double, Cell> dCell = Util.getMax(
-                        new Pair<Double, Cell>(M.getMatrix()[i - 1][j].getValue() - gapOpen - gapExtend, M.getMatrix()[i - 1][j]),
-                        new Pair<Double, Cell>(D.getMatrix()[i - 1][j].getValue() - gapExtend, D.getMatrix()[i - 1][j]),
-                        new Pair<Double, Cell>(I.getMatrix()[i - 1][j].getValue() - gapOpen - gapExtend, I.getMatrix()[i - 1][j]));
+                        new Pair<Double, Cell>(M.getMatrix()[i - 1][j].getValue() + gapOpen, M.getMatrix()[i - 1][j]),
+                        new Pair<Double, Cell>(I.getMatrix()[i - 1][j].getValue() + gapExtend, I.getMatrix()[i - 1][j]));
 
-                D.getMatrix()[i][j] = new Cell(dCell.getKey(), dCell.getValue(), i, j, Cell.VERTICAL);
+                I.getMatrix()[i][j] = new Cell(dCell.getKey(), dCell.getValue(), i, j, Cell.VERTICAL);
 
                 Pair<Double, Cell> mCell = Util.getMax(
                         new Pair<Double, Cell>(M.getMatrix()[i - 1][j - 1].getValue() + isEquals(string1.charAt(i - 1), string2.charAt(j - 1)), M.getMatrix()[i - 1][j - 1]),

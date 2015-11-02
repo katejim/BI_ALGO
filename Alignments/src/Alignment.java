@@ -32,8 +32,8 @@ abstract public class Alignment {
                 Pair<Double, Cell> first = new Pair<Double, Cell>(mmatrix.getMatrix()[i - 1][j - 1].getValue() +
                         isEquals(str1.charAt(i - 1), str2.charAt(j - 1)), mmatrix.getMatrix()[i - 1][j - 1]);
 
-                Pair<Double, Cell> second = new Pair<Double, Cell>(mmatrix.getMatrix()[i - 1][j].getValue() - gap, mmatrix.getMatrix()[i - 1][j]);
-                Pair<Double, Cell> third = new Pair<Double, Cell>(mmatrix.getMatrix()[i][j - 1].getValue() - gap, mmatrix.getMatrix()[i][j - 1]);
+                Pair<Double, Cell> second = new Pair<Double, Cell>(mmatrix.getMatrix()[i - 1][j].getValue() + gap, mmatrix.getMatrix()[i - 1][j]);
+                Pair<Double, Cell> third = new Pair<Double, Cell>(mmatrix.getMatrix()[i][j - 1].getValue() + gap, mmatrix.getMatrix()[i][j - 1]);
 
 
                 Pair<Double, Cell> result = Util.getMax(first, second, third);

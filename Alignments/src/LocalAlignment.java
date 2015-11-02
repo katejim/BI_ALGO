@@ -62,8 +62,10 @@ public class LocalAlignment extends Alignment {
         Collections.reverse(resultString1);
         Collections.reverse(resultString2);
 
-        return new Pair<String, String>(firstBegin + getStringRepresentation(resultString1) + firstEnd,
-                secondBegin + getStringRepresentation(resultString2) + secondEnd);
+
+        return new Pair<String, String>(getStringRepresentation(resultString1),
+                getStringRepresentation(resultString2));
+
     }
 
     private String whiteSpaceString(int length) {

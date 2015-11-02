@@ -29,5 +29,19 @@ public class Util {
         return result;
     }
 
+    public static Pair<Double, Cell> getMax(Pair<Double, Cell> diag, Pair<Double, Cell> vertical) {
+        double max = -1;
+
+        Pair<Double, Cell> result;
+        if (diag.getKey() > vertical.getKey()) {
+            max = diag.getKey();
+            result = diag;
+        } else {
+            max = vertical.getKey();
+            result = vertical;
+        }
+        return result;
+    }
+
 
 }

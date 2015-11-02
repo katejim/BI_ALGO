@@ -48,11 +48,11 @@ public class WeightedGlobal extends GlobalAlignment {
 
         mm.getMatrix()[1][0] = new Cell(-2, null, 1, 0);
         mm.getMatrix()[1][1] = new Cell(7, null, 1, 1);
-        mm.getMatrix()[1][2] = new Cell(-1, null, 1, 2);
+        mm.getMatrix()[1][2] = new Cell(-2.01, null, 1, 2);
         mm.getMatrix()[1][3] = new Cell(3, null, 1, 3);
 
         mm.getMatrix()[2][0] = new Cell(-1, null, 2, 0);
-        mm.getMatrix()[2][1] = new Cell(-1, null, 2, 1);
+        mm.getMatrix()[2][1] = new Cell(-2.01, null, 2, 1);
         mm.getMatrix()[2][2] = new Cell(7, null, 2, 2);
         mm.getMatrix()[2][3] = new Cell(0, null, 2, 3);
 
